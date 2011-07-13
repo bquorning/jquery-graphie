@@ -81,6 +81,17 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         });
         return data;
       },
+      'table': function() {
+        data.labels.push($el.find('tr:first td:first').text());
+        data.labels.push($el.find('tr:last td:first').text());
+        $el.find('tr').each(function() {
+          data.points.push([
+            parseInt($(this).find('td:first').text(), 10),
+            parseInt($(this).find('td:last').text(), 10)
+          ]);
+        });
+        return data;
+      },
       'ul': function() {
         $el.find('li').each(function() {
           data.points.push(parseInt($(this).text(), 10));
@@ -107,6 +118,22 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         for(var i = 0, j = points.length; i < j; i++) {
           x = interval * i;
           y = (opts.h - (scale * points[i]));
+          coords += ' S' + (x - opts.line.smoothing) + ' ' + y + ' ' + x + ' ' + y;
+        }
+        if (opts.line.bgcolor) {
+          coords += ' L' + opts.w + ' ' + opts.h;
+        }
+        return coords;
+      },
+      'x_line': function() {
+        x_scale = getXScale(points);
+        opts.line.smoothing === 'auto' ? opts.line.smoothing = x_scale / 2 : false;
+        if (!opts.line.bgcolor) {
+          coords = 'M0 ' + (opts.h - (scale * points[0]));
+        }
+        for(var i = 0, j = points.length; i < j; i++) {
+          x = x_scale * points[i][0];
+          y = (opts.h - (scale * points[i][1]));
           coords += ' S' + (x - opts.line.smoothing) + ' ' + y + ' ' + x + ' ' + y;
         }
         if (opts.line.bgcolor) {
@@ -146,7 +173,20 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   }
 
   function getYScale(points) {
+    if(opts.type == 'x_line') {
+      points = $.map(points, function(n, i) {
+        return n[1];
+      });
+    }
     return opts.h / Math.max.apply(Math, points);
+  }
+  function getXScale(points) {
+    if(opts.type == 'x_line') {
+      points = $.map(points, function(n, i) {
+        return n[0];
+      });
+    }
+    return opts.w / Math.max.apply(Math, points);
   }
 
 })(jQuery);
