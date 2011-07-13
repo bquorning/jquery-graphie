@@ -7,13 +7,13 @@ Visit [http://jquery-graphie.heroku.com]() for examples.
 ## Using graphie
 
 - Include [Raphael](http://raphaeljs.com/) and [the plugin](https://github.com/camerond/jquery-graphie/blob/master/public/javascript/jquery.graphie.js).
-- Call `$.graphie()` on any `<dl>`, `<ul>` or `<ol>` that contains numeric values.
+- Call `$.graphie()` on any `<dl>`, `<ul>` or `<ol>` that contains numeric values, or on a `<table>` whose `<tr>`’s have two `<td>` elements containing numeric values for x and y coordinates, respectively.
 - Graphie will add a class of 'graphie' on any object that it draws within, allowing you to set dimensions & background color of that object in CSS.
 
 ## Options (defaults shown)
 
     $item.graphie({
-      type: 'line',             // can be either 'line' or 'column'
+      type: 'line',             // can be either 'line', 'column' or 'x_line'
       line: {
         bgcolor: '#5ad0ea',     // Background color of line/columns. Set to false for no background.
         smoothing: 'auto',      // You can set an arbitrary line smoothing value here (number without 'px'). Change to 0 for straight lines.
